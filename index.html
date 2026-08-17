@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d0f" />
+  <meta name="description" content="Treino e dieta de Eliel: rotina, check-ins e progresso em um PWA offline." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Shape" />
+  <title>Shape — Treino & Dieta</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css?v=1.0.0" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div><p class="eyebrow">ROTINA DE DEFINIÇÃO</p><h1>Shape</h1></div>
+      <button id="installBtn" class="icon-button install-button" type="button" aria-label="Instalar aplicativo" title="Instalar aplicativo" hidden><span>＋</span></button>
+    </header>
+    <main id="app" class="main-content" aria-live="polite"></main>
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <button class="nav-item active" data-route="today" type="button"><span class="nav-icon">✓</span><span>Hoje</span></button>
+      <button class="nav-item" data-route="workout" type="button"><span class="nav-icon">◆</span><span>Treino</span></button>
+      <button class="nav-item" data-route="diet" type="button"><span class="nav-icon">●</span><span>Dieta</span></button>
+      <button class="nav-item" data-route="progress" type="button"><span class="nav-icon">↗</span><span>Progresso</span></button>
+    </nav>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="modal" class="modal">
+    <form method="dialog" class="modal-card">
+      <div class="modal-head"><div><p class="eyebrow">SHAPE</p><h2 id="modalTitle">Detalhes</h2></div><button value="cancel" class="icon-button" aria-label="Fechar">×</button></div>
+      <div id="modalBody" class="modal-body"></div>
+    </form>
+  </dialog>
+  <script src="./app.js?v=1.0.0" defer></script>
+</body>
+</html>
