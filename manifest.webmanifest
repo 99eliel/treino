@@ -1,7 +1,7 @@
 {
-  "name": "Shape — Ganho limpo & Recomposição",
+  "name": "Shape — Braços & Ombros",
   "short_name": "Shape",
-  "description": "Rotina pessoal de ganho limpo, recomposição, treino, dieta, cardio e progresso.",
+  "description": "PWA pessoal de ganho limpo e recomposição com prioridade em braços e ombros.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -10,5 +10,12 @@
   "background_color": "#080a0c",
   "theme_color": "#0b0d0f",
   "categories": ["fitness", "health", "lifestyle"],
-  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }

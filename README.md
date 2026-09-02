@@ -1,23 +1,27 @@
-# Shape — Ganho limpo & Recomposição
+# Shape — Treino & Dieta
 
-PWA pessoal para acompanhar treino, dieta, cardio, medidas e progressão.
+PWA pessoal para ganho limpo/recomposição, agora com **especialização em braços e ombros**.
 
-## Versão 2.0
+## Versão 2.1
 
-- Fase atual: **ganho limpo / recomposição**.
-- Meta calórica inicial: **2800–3000 kcal**.
-- Proteína: **180–200 g/dia**.
-- Ganho de peso alvo: **0,1–0,25 kg por semana**.
-- Treino 4x/semana com foco em progressão de carga e repetições.
-- Perna em volume menor, mas com intensidade suficiente para manutenção.
-- Cardio reduzido e priorizando recuperação.
-- Registro de carga/repetições por exercício.
-- Check-in de fome e compulsão.
-- Peso, cintura, BF e histórico.
-- Backup em JSON.
-- PWA offline com atualização automática.
-- Os dados permanecem salvos no dispositivo via `localStorage`.
+- 4 treinos por semana.
+- Prioridade de volume para bíceps, tríceps e deltoides.
+- 14 séries diretas semanais para bíceps e 14 para tríceps.
+- Peito e costas mantidos com volume suficiente para preservar e progredir sem roubar recuperação dos braços.
+- Sem dia exclusivo de perna: Hack/Leg Press, Stiff/RDL e mesa flexora ficam distribuídos em três treinos de superiores.
+- Registro de carga e repetições por exercício.
+- Dieta simples de aproximadamente 2800–3000 kcal e 180–200 g de proteína.
+- Registro de peso, cintura e BF estimado.
+- Backup/restauração em JSON.
+- PWA instalável, offline e com atualização automática de versão.
+- Dados locais preservados via `localStorage`.
 
-## GitHub Pages
+## Semana
 
-Em **Settings → Pages**, use **Deploy from a branch**, branch `main`, pasta `/ (root)`.
+- Segunda: Braços A + Torso + Hack/Leg Press
+- Terça: Ombros + Braços B + Stiff/RDL
+- Quarta: recuperação ativa/cardio leve
+- Quinta: Braços C + Torso + Mesa flexora
+- Sexta: Ombros + Braços D
+- Sábado: livre/caminhada
+- Domingo: descanso

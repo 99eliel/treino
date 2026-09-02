@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const UPDATE_INTERVAL = 30 * 60 * 1000;
 
   async function checkForUpdate() {
