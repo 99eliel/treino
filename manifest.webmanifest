@@ -1,7 +1,7 @@
 {
-  "name": "Shape — Treino & Dieta",
+  "name": "Shape — Ganho limpo & Recomposição",
   "short_name": "Shape",
-  "description": "Rotina pessoal de treino, dieta, cardio e progresso.",
+  "description": "Rotina pessoal de ganho limpo, recomposição, treino, dieta, cardio e progresso.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -10,12 +10,5 @@
   "background_color": "#080a0c",
   "theme_color": "#0b0d0f",
   "categories": ["fitness", "health", "lifestyle"],
-  "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }

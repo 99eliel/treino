@@ -1,20 +1,16 @@
-const CACHE = 'shape-pwa-v1.1.0';
+const CACHE = 'shape-pwa-v2.0.0';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=1.0.0',
-  './app.js?v=1.0.0',
-  './enhancements.js?v=1.1.0',
-  './manifest.webmanifest',
+  './styles.css?v=2.0.0',
+  './app.js?v=2.0.0',
+  './enhancements.js?v=2.0.0',
+  './manifest.webmanifest?v=2.0.0',
   './icon.svg'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
@@ -31,11 +27,9 @@ self.addEventListener('message', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
-
   const request = event.request.mode === 'navigate'
     ? new Request(event.request, { cache: 'no-store' })
     : event.request;
-
   event.respondWith(
     fetch(request)
       .then(response => {

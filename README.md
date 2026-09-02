@@ -1,23 +1,23 @@
-# Shape — Treino & Dieta
+# Shape — Ganho limpo & Recomposição
 
-PWA pessoal para acompanhamento de treino, dieta, cardio e evolução física.
+PWA pessoal para acompanhar treino, dieta, cardio, medidas e progressão.
 
-## V1
+## Versão 2.0
 
-- Tela **Hoje** com checklist e aderência diária.
-- Treino compacto 4x/semana com marcação por exercício.
-- Registro de carga e repetições por exercício.
-- Cardio planejado na semana.
-- Dieta simples de aproximadamente 2400–2500 kcal e 180–195 g de proteína.
-- Check-in simples de fome/episódio de perda de controle para observar padrões.
-- Registro de peso, cintura e BF estimado.
-- Histórico e gráfico local de peso.
-- Backup e restauração em JSON.
-- PWA instalável e funcional offline.
-- Dados armazenados apenas no dispositivo via `localStorage` nesta versão.
+- Fase atual: **ganho limpo / recomposição**.
+- Meta calórica inicial: **2800–3000 kcal**.
+- Proteína: **180–200 g/dia**.
+- Ganho de peso alvo: **0,1–0,25 kg por semana**.
+- Treino 4x/semana com foco em progressão de carga e repetições.
+- Perna em volume menor, mas com intensidade suficiente para manutenção.
+- Cardio reduzido e priorizando recuperação.
+- Registro de carga/repetições por exercício.
+- Check-in de fome e compulsão.
+- Peso, cintura, BF e histórico.
+- Backup em JSON.
+- PWA offline com atualização automática.
+- Os dados permanecem salvos no dispositivo via `localStorage`.
 
-## Publicar com GitHub Pages
+## GitHub Pages
 
-Em **Settings → Pages**, selecione **Deploy from a branch**, escolha a branch `main` e a pasta `/ (root)`.
-
-O aplicativo usa caminhos relativos e funciona diretamente no GitHub Pages.
+Em **Settings → Pages**, use **Deploy from a branch**, branch `main`, pasta `/ (root)`.
