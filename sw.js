@@ -1,4 +1,4 @@
-const CACHE = 'shape-pwa-v2.3.0';
+const CACHE = 'shape-pwa-v2.3.1';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,7 @@ const ASSETS = [
   './app.js?v=2.1.0',
   './cardio-phase.js?v=2.2.0',
   './phase-watch.js?v=2.2.0',
-  './enhancements.js?v=2.3.0',
+  './enhancements.js?v=2.3.1',
   './manifest.webmanifest?v=2.2.0',
   './icon.svg'
 ];
