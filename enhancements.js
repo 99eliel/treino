@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '2.3.1';
+  const VERSION = '2.4.0';
   const UPDATE_INTERVAL = 30 * 60 * 1000;
   const statusEl = () => document.getElementById('updateStatus');
   let checking = false;
@@ -29,9 +29,6 @@
     setStatus('Verificando…');
 
     try {
-      // IMPORTANTE: não registrar outro Service Worker aqui.
-      // O app.js é o único responsável pelo registro. Este módulo apenas
-      // consulta e atualiza a inscrição existente para evitar loop de versões.
       const registration = await navigator.serviceWorker.getRegistration();
 
       if (!registration) {
