@@ -1,8 +1,9 @@
 (() => {
   'use strict';
-  const VERSION = '2.3.0';
+  const VERSION = '2.3.1';
   const UPDATE_INTERVAL = 30 * 60 * 1000;
   const statusEl = () => document.getElementById('updateStatus');
+  let checking = false;
 
   function setStatus(text, tone = 'normal') {
     const el = statusEl();
@@ -13,53 +14,57 @@
     else el.style.color = 'var(--muted,#8f969e)';
   }
 
-  async function ensureCurrentServiceWorker() {
-    if (!('serviceWorker' in navigator)) {
-      setStatus('Atualização automática indisponível', 'warn');
-      return null;
-    }
-    try {
-      return await navigator.serviceWorker.register('./sw.js?v=2.3.0');
-    } catch (error) {
-      setStatus('Falha ao verificar', 'warn');
-      console.warn('Não foi possível registrar o service worker atual:', error);
-      return null;
-    }
-  }
-
   async function checkForUpdate() {
+    if (checking) return;
     if (!navigator.onLine) {
       setStatus('Offline', 'warn');
       return;
     }
-    setStatus('Verificando…');
     if (!('serviceWorker' in navigator)) {
       setStatus('Atualização automática indisponível', 'warn');
       return;
     }
+
+    checking = true;
+    setStatus('Verificando…');
+
     try {
-      const registration = await ensureCurrentServiceWorker() || await navigator.serviceWorker.getRegistration();
+      // IMPORTANTE: não registrar outro Service Worker aqui.
+      // O app.js é o único responsável pelo registro. Este módulo apenas
+      // consulta e atualiza a inscrição existente para evitar loop de versões.
+      const registration = await navigator.serviceWorker.getRegistration();
+
       if (!registration) {
-        setStatus('Falha ao verificar', 'warn');
+        setStatus('Inicializando…');
+        checking = false;
+        setTimeout(checkForUpdate, 1800);
         return;
       }
+
       await registration.update();
+
       if (registration.waiting) {
         setStatus('Aplicando atualização…');
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        checking = false;
         return;
       }
+
       setStatus('Atualizado', 'ok');
     } catch (error) {
       setStatus('Falha ao verificar', 'warn');
       console.warn('Não foi possível verificar atualização do PWA:', error);
+    } finally {
+      checking = false;
     }
   }
 
-  window.addEventListener('load', () => setTimeout(checkForUpdate, 800));
+  window.addEventListener('load', () => setTimeout(checkForUpdate, 1200));
   window.addEventListener('online', checkForUpdate);
   window.addEventListener('offline', () => setStatus('Offline', 'warn'));
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) checkForUpdate();
+  });
   setInterval(checkForUpdate, UPDATE_INTERVAL);
 
   try {
@@ -75,7 +80,7 @@
           setTimeout(() => toast.classList.remove('show'), 2400);
         }
         setTimeout(() => setStatus('Atualizado', 'ok'), 3200);
-      }, 1100), { once:true });
+      }, 1500), { once:true });
     }
   } catch (_) {}
 })();
