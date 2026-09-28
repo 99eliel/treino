@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '2.2.0';
+  const VERSION = '2.4.0';
   const STORAGE_KEY = 'shape-data-v1';
   const START = new Date(2026, 8, 28);
   const END = new Date(2026, 9, 11, 23, 59, 59, 999);
@@ -16,6 +16,16 @@
     { title:'Bike ou elíptico', detail:'35–45 min · leve/moderado', note:'Cardio contínuo. Nada de HIIT nessas duas semanas.' },
     { title:'Caminhada', detail:'40–60 min · confortável', note:'Pode dividir em duas caminhadas se preferir.' },
     { title:'Recuperação', detail:'Descanso total ou caminhada bem leve 20–30 min', note:'Dormir e recuperar também fazem parte do plano.' }
+  ];
+
+  const miniPlan = [
+    { focus:'Peito + bíceps', exercises:[['bench','Supino reto','2 × 5–8'],['curlbar','Rosca direta barra W','2 × 6–10']] },
+    { focus:'Costas + tríceps', exercises:[['pulldown','Puxada alta','2 × 6–10'],['overtri','Tríceps francês / acima da cabeça','2 × 8–12']] },
+    { focus:'Ombros', exercises:[['ohp','Desenvolvimento máquina/halter','2 × 6–10'],['lateral','Elevação lateral','2 × 10–15']] },
+    { focus:'Peito + costas', exercises:[['incline','Supino inclinado','2 × 6–10'],['row','Remada máquina/baixa','2 × 6–10']] },
+    { focus:'Braços', exercises:[['scott','Rosca Scott','2 × 8–12'],['pushdown','Tríceps na polia','2 × 8–12']] },
+    { focus:'Pernas', exercises:[['legpress','Leg Press','2 × 6–10'],['legcurl','Mesa flexora','2 × 8–12']] },
+    { focus:'Recuperação ativa', exercises:[['calf','Panturrilha','2 × 10–15'],['abs','Abdominal na polia','2 × 10–15']] }
   ];
 
   const cutMeals = [
@@ -34,30 +44,56 @@
   function formatDate(d) { return new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit'}).format(d); }
   function esc(s){ return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
   function getData(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; } }
+  function saveData(data){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+  function ensureDay(data, key = dateKey()) {
+    data.daily ||= {};
+    data.daily[key] ||= { meals:{}, workoutDone:false, cardioDone:false, exercises:{}, hunger:null, binge:null };
+    data.daily[key].miniActivation ||= {};
+    return data.daily[key];
+  }
   function todayDone(){ return Boolean(getData().daily?.[dateKey()]?.cardioDone); }
+  function miniDone(id, key = dateKey()){ return Boolean(getData().daily?.[key]?.miniActivation?.[id]); }
   function mealDone(id){ return Boolean(getData().daily?.[dateKey()]?.meals?.[id]); }
   function currentPlan(){ return cardioPlan[(dayNumber()-1) % 7]; }
+  function currentMiniPlan(){ return miniPlan[(dayNumber()-1) % 7]; }
   function currentRoute(){ return document.querySelector('.nav-item.active')?.dataset.route || 'today'; }
 
   function header(){
     const eyebrow = document.querySelector('.topbar .eyebrow');
-    if (eyebrow) eyebrow.textContent = '14 DIAS · CARDIO & RECUPERAÇÃO';
-    document.title = 'Shape — Cardio & Recuperação';
+    if (eyebrow) eyebrow.textContent = '14 DIAS · CARDIO + ATIVAÇÃO';
+    document.title = 'Shape — Cardio & Ativação';
+  }
+
+  function miniRows(plan, key = dateKey(), interactive = true){
+    return plan.exercises.map(([id,name,target]) => {
+      const done = miniDone(id, key);
+      return `<div class="check-row ${done ? 'done' : ''}" ${interactive ? `data-mini-toggle="${esc(id)}"` : ''}>
+        <button type="button" class="check-circle" ${interactive ? `data-mini-toggle="${esc(id)}"` : ''} style="${done ? 'background:var(--accent);border-color:var(--accent);' : ''}">${done ? '✓' : ''}</button>
+        <div class="check-copy"><span class="check-label">${esc(name)}</span><span class="check-meta">${esc(target)} · 1–2 reps em reserva</span></div>
+      </div>`;
+    }).join('');
   }
 
   function renderToday(){
-    const n = dayNumber(), p = currentPlan(), done = todayDone(), remaining = 14 - n;
+    const n = dayNumber(), p = currentPlan(), mini = currentMiniPlan(), done = todayDone(), remaining = 14 - n;
+    const miniCompleted = mini.exercises.filter(([id]) => miniDone(id)).length;
+    const score = Math.round(((done ? 1 : 0) + miniCompleted) / 3 * 100);
     app.innerHTML = `
       <section class="hero-card" data-cardio-phase="today">
         <div class="hero-row">
-          <div><p class="eyebrow">FASE TEMPORÁRIA</p><h2>Dia ${n}/14</h2><p class="hero-sub">Foco total em cardio, secar um pouco e recuperar a musculatura.</p></div>
-          <div class="score-ring" style="--p:${done ? 100 : 0}"><span class="score-value">${done ? '✓' : n+'/14'}</span></div>
+          <div><p class="eyebrow">FASE TEMPORÁRIA</p><h2>Dia ${n}/14</h2><p class="hero-sub">Cardio em foco + estímulo curto e pesado para manter os músculos ativos.</p></div>
+          <div class="score-ring" style="--p:${score}"><span class="score-value">${score}%</span></div>
         </div>
         <div class="hero-stats">
           <div class="mini-stat"><b>${remaining}</b><span>dias restantes</span></div>
-          <div class="mini-stat"><b>180–200 g</b><span>proteína</span></div>
-          <div class="mini-stat"><b>${RETURN_DATE}</b><span>volta aos pesos</span></div>
+          <div class="mini-stat"><b>2</b><span>exercícios hoje</span></div>
+          <div class="mini-stat"><b>${RETURN_DATE}</b><span>volta ao treino</span></div>
         </div>
+      </section>
+      <section class="section">
+        <div class="section-head"><h3>Ativação de hoje</h3><p>${esc(mini.focus)}</p></div>
+        <div class="card">${miniRows(mini)}</div>
+        <div class="note" style="margin-top:10px"><b>Como treinar:</b> faça primeiro os pesos e depois o cardio. São só <b>2 séries de trabalho por exercício</b>, com carga boa e técnica limpa. Pare com <b>1–2 repetições sobrando</b>; nada de falha, dropset ou série extra.</div>
       </section>
       <section class="section">
         <div class="section-head"><h3>Cardio de hoje</h3><p>${formatDate(new Date())}</p></div>
@@ -69,20 +105,21 @@
         </div>
         <div class="note" style="margin-top:10px"><b>Como fazer:</b> ${esc(p.note)}</div>
       </section>
-      <section class="section"><div class="note"><b>Musculação pesada pausada:</b> nessas duas semanas não precisa buscar carga nem falha. A prioridade é baixar a fadiga acumulada. O treino de braços + ombros volta automaticamente em <b>${RETURN_DATE}</b>.</div></section>
-      <section class="section"><div class="note warning-note"><b>Dieta temporária:</b> alvo de aproximadamente <b>2.400–2.600 kcal</b> e <b>180–200 g de proteína</b>. Déficit moderado, sem dieta de fome.</div></section>`;
+      <section class="section"><div class="note"><b>Objetivo dessas duas semanas:</b> manter o sinal de força com baixíssimo volume, enquanto o cardio e a redução da fadiga continuam sendo prioridade. O bloco completo de braços + ombros volta em <b>${RETURN_DATE}</b>.</div></section>
+      <section class="section"><div class="note warning-note"><b>Dieta temporária:</b> aproximadamente <b>2.400–2.600 kcal</b> e <b>180–200 g de proteína</b>. Déficit moderado, sem dieta de fome.</div></section>`;
   }
 
   function renderPlan(){
     const current = dayNumber();
     const rows = Array.from({length:14}, (_, i) => {
-      const d = phaseDate(i), key = dateKey(d), p = cardioPlan[i % 7], data = getData(), done = Boolean(data.daily?.[key]?.cardioDone), active = i+1 === current;
-      return `<div class="check-row ${done ? 'done' : ''}" style="${active ? 'border-left:3px solid var(--accent);' : ''}">
-        <div class="check-circle" style="${done ? 'background:var(--accent);border-color:var(--accent);' : ''}">${done ? '✓' : i+1}</div>
-        <div class="check-copy"><span class="check-label">Dia ${i+1} · ${formatDate(d)} — ${esc(p.title)}</span><span class="check-meta">${esc(p.detail)}</span></div>
+      const d = phaseDate(i), key = dateKey(d), p = cardioPlan[i % 7], mini = miniPlan[i % 7], data = getData();
+      const cardioDone = Boolean(data.daily?.[key]?.cardioDone), miniCount = mini.exercises.filter(([id]) => Boolean(data.daily?.[key]?.miniActivation?.[id])).length, active = i+1 === current;
+      return `<div class="check-row ${cardioDone && miniCount === 2 ? 'done' : ''}" style="${active ? 'border-left:3px solid var(--accent);' : ''}">
+        <div class="check-circle" style="${cardioDone && miniCount === 2 ? 'background:var(--accent);border-color:var(--accent);' : ''}">${cardioDone && miniCount === 2 ? '✓' : i+1}</div>
+        <div class="check-copy"><span class="check-label">Dia ${i+1} · ${formatDate(d)} — ${esc(mini.focus)}</span><span class="check-meta">${esc(mini.exercises[0][1])} + ${esc(mini.exercises[1][1])} · cardio: ${esc(p.title)} · ativação ${miniCount}/2</span></div>
       </div>`;
     }).join('');
-    app.innerHTML = `<section class="hero-card" data-cardio-phase="plan"><p class="eyebrow">CARDIO & RECUPERAÇÃO</p><h2>Plano completo · 14 dias</h2><p class="hero-sub">Sem HIIT diário e sem musculação pesada. O objetivo é terminar mais seco e mais recuperado.</p></section><section class="section card">${rows}</section><section class="section"><div class="note"><b>Intensidade padrão:</b> esforço moderado. Se estiver moído, reduza ritmo ou duração; recuperação continua sendo a prioridade.</div></section>`;
+    app.innerHTML = `<section class="hero-card" data-cardio-phase="plan"><p class="eyebrow">CARDIO + ATIVAÇÃO</p><h2>Plano completo · 14 dias</h2><p class="hero-sub">Dois exercícios curtos por dia para manter o estímulo muscular, sem roubar a recuperação.</p></section><section class="section card">${rows}</section><section class="section"><div class="note"><b>Regra:</b> 2 séries de trabalho por exercício, 1–2 repetições em reserva. A sessão de pesos deve caber em cerca de 15–20 min. Depois faça o cardio planejado.</div></section>`;
   }
 
   function renderDiet(){
@@ -92,8 +129,9 @@
 
   function renderProgress(){
     const data = getData(), list = Array.isArray(data.measurements) ? [...data.measurements].sort((a,b)=>b.date.localeCompare(a.date)) : [], latest = list[0];
-    const completed = Array.from({length:14}, (_,i)=>Boolean(data.daily?.[dateKey(phaseDate(i))]?.cardioDone)).filter(Boolean).length;
-    app.innerHTML = `<section class="hero-card" data-cardio-phase="progress"><div class="hero-row"><div><p class="eyebrow">RECUPERAÇÃO · DIA ${dayNumber()}/14</p><h2>${latest?.weight ? String(latest.weight).replace('.',',')+' kg' : 'Sem peso'}</h2><p class="hero-sub">Compare principalmente peso e cintura no início e no fim das duas semanas.</p></div><button type="button" class="primary-button" data-action="add-measurement" style="width:auto">+ Medida</button></div><div class="hero-stats"><div class="mini-stat"><b>${completed}/14</b><span>dias marcados</span></div><div class="mini-stat"><b>${latest?.waist ? String(latest.waist).replace('.',',')+' cm' : '—'}</b><span>cintura</span></div><div class="mini-stat"><b>${RETURN_DATE}</b><span>retorno</span></div></div></section><section class="section"><div class="note"><b>O que observar:</b> aparência, cintura, disposição e recuperação. Parte da mudança visual pode vir de menos retenção/glicogênio e menos fadiga do treino pesado, não apenas de gordura perdida.</div></section><section class="section card"><div class="section-head"><h3>Últimas medidas</h3><p>v${VERSION}</p></div>${list.length ? list.slice(0,6).map(x=>`<div class="entry"><div><b>${esc(x.date)}</b></div><div class="entry-values"><strong>${x.weight ? esc(String(x.weight).replace('.',','))+' kg' : '—'}</strong><span>${x.waist ? esc(String(x.waist).replace('.',','))+' cm' : '—'}</span></div></div>`).join('') : '<div class="empty-state">Adicione peso e cintura para comparar o dia 1 com o dia 14.</div>'}</section>`;
+    const completedCardio = Array.from({length:14}, (_,i)=>Boolean(data.daily?.[dateKey(phaseDate(i))]?.cardioDone)).filter(Boolean).length;
+    const miniCompleted = Array.from({length:14}, (_,i)=>miniPlan[i%7].exercises.every(([id])=>Boolean(data.daily?.[dateKey(phaseDate(i))]?.miniActivation?.[id]))).filter(Boolean).length;
+    app.innerHTML = `<section class="hero-card" data-cardio-phase="progress"><div class="hero-row"><div><p class="eyebrow">RECUPERAÇÃO · DIA ${dayNumber()}/14</p><h2>${latest?.weight ? String(latest.weight).replace('.',',')+' kg' : 'Sem peso'}</h2><p class="hero-sub">Compare peso, cintura, aparência e disposição no início e no fim.</p></div><button type="button" class="primary-button" data-action="add-measurement" style="width:auto">+ Medida</button></div><div class="hero-stats"><div class="mini-stat"><b>${completedCardio}/14</b><span>cardios</span></div><div class="mini-stat"><b>${miniCompleted}/14</b><span>ativações</span></div><div class="mini-stat"><b>${RETURN_DATE}</b><span>retorno</span></div></div></section><section class="section"><div class="note"><b>O que observar:</b> aparência, cintura, disposição e recuperação. Parte da mudança visual pode vir de menos retenção/glicogênio e menos fadiga do treino pesado, não apenas de gordura perdida.</div></section><section class="section card"><div class="section-head"><h3>Últimas medidas</h3><p>v${VERSION}</p></div>${list.length ? list.slice(0,6).map(x=>`<div class="entry"><div><b>${esc(x.date)}</b></div><div class="entry-values"><strong>${x.weight ? esc(String(x.weight).replace('.',','))+' kg' : '—'}</strong><span>${x.waist ? esc(String(x.waist).replace('.',','))+' cm' : '—'}</span></div></div>`).join('') : '<div class="empty-state">Adicione peso e cintura para comparar o dia 1 com o dia 14.</div>'}</section>`;
   }
 
   let applying = false;
@@ -112,6 +150,20 @@
     }
     applying = false;
   }
+
+  document.addEventListener('click', event => {
+    const target = event.target.closest('[data-mini-toggle]');
+    if (!target || !isActive()) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const id = target.dataset.miniToggle;
+    const data = getData();
+    const day = ensureDay(data);
+    day.miniActivation[id] = !day.miniActivation[id];
+    saveData(data);
+    if (currentRoute() === 'today') renderToday();
+    else apply();
+  });
 
   if (!isActive()) return;
   const observer = new MutationObserver(() => setTimeout(apply, 0));
