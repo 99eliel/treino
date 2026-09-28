@@ -1,12 +1,22 @@
 (() => {
   'use strict';
-  const VERSION = '2.1.0';
+  const VERSION = '2.2.0';
   const UPDATE_INTERVAL = 30 * 60 * 1000;
+
+  async function ensureCurrentServiceWorker() {
+    if (!('serviceWorker' in navigator)) return null;
+    try {
+      return await navigator.serviceWorker.register('./sw.js?v=2.2.0');
+    } catch (error) {
+      console.warn('Não foi possível registrar o service worker atual:', error);
+      return null;
+    }
+  }
 
   async function checkForUpdate() {
     if (!('serviceWorker' in navigator) || !navigator.onLine) return;
     try {
-      const registration = await navigator.serviceWorker.getRegistration();
+      const registration = await ensureCurrentServiceWorker() || await navigator.serviceWorker.getRegistration();
       if (!registration) return;
       await registration.update();
       if (registration.waiting) registration.waiting.postMessage({ type: 'SKIP_WAITING' });
