@@ -1,7 +1,7 @@
 {
-  "name": "Shape — Braços & Ombros",
-  "short_name": "Shape",
-  "description": "PWA pessoal de ganho limpo e recomposição com prioridade em braços e ombros.",
+  "name": "Dieta Família — Lígia & Edson",
+  "short_name": "Dieta Família",
+  "description": "Acompanhamento familiar de dieta, refeições, peso, cintura e aderência.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "background_color": "#080a0c",
   "theme_color": "#0b0d0f",
-  "categories": ["fitness", "health", "lifestyle"],
+  "categories": ["health", "lifestyle", "fitness"],
   "icons": [
     {
       "src": "./icon.svg",
