@@ -1,27 +1,35 @@
-# Shape — Treino & Dieta
+# Dieta Família — Lígia & Edson
 
-PWA pessoal para ganho limpo/recomposição, agora com **especialização em braços e ombros**.
+PWA familiar para acompanhamento diário de alimentação e evolução física.
 
-## Versão 2.1
+## Perfis
 
-- 4 treinos por semana.
-- Prioridade de volume para bíceps, tríceps e deltoides.
-- 14 séries diretas semanais para bíceps e 14 para tríceps.
-- Peito e costas mantidos com volume suficiente para preservar e progredir sem roubar recuperação dos braços.
-- Sem dia exclusivo de perna: Hack/Leg Press, Stiff/RDL e mesa flexora ficam distribuídos em três treinos de superiores.
-- Registro de carga e repetições por exercício.
-- Dieta simples de aproximadamente 2800–3000 kcal e 180–200 g de proteína.
-- Registro de peso, cintura e BF estimado.
-- Backup/restauração em JSON.
-- PWA instalável, offline e com atualização automática de versão.
-- Dados locais preservados via `localStorage`.
+### Lígia
+- 1,60 m
+- referência inicial: 117 kg
+- objetivo: emagrecimento gradual
+- faixa inicial no app: 1.800–2.000 kcal
+- proteína: 120–140 g/dia
+- musculação pela manhã e almoço às 12h
+- campo de acompanhamento de apetite e sintomas durante uso de tirzepatida
 
-## Semana
+### Edson
+- 1,70 m
+- referência inicial: 77 kg
+- objetivo inicial: manutenção/recomposição
+- faixa inicial no app: 2.200–2.400 kcal
+- proteína: 130–150 g/dia
+- musculação pela manhã e almoço às 12h
 
-- Segunda: Braços A + Torso + Hack/Leg Press
-- Terça: Ombros + Braços B + Stiff/RDL
-- Quarta: recuperação ativa/cardio leve
-- Quinta: Braços C + Torso + Mesa flexora
-- Sexta: Ombros + Braços D
-- Sábado: livre/caminhada
-- Domingo: descanso
+## Recursos
+
+- tela Hoje com os dois perfis
+- dieta e quantidades separadas para cada pessoa
+- checklist diário de refeições, treino e hidratação
+- peso e cintura por perfil
+- aderência dos últimos 7 dias
+- histórico individual
+- backup/restauração em JSON
+- PWA instalável, offline e com atualização automática
+
+Os alvos calóricos são pontos de partida e devem ser ajustados pela tendência das semanas e, quando necessário, com acompanhamento profissional.
