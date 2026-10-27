@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '2.4.0';
+  const VERSION = '3.0.0';
   const UPDATE_INTERVAL = 30 * 60 * 1000;
   const statusEl = () => document.getElementById('updateStatus');
   let checking = false;
@@ -30,23 +30,16 @@
 
     try {
       const registration = await navigator.serviceWorker.getRegistration();
-
       if (!registration) {
         setStatus('Inicializando…');
-        checking = false;
-        setTimeout(checkForUpdate, 1800);
         return;
       }
-
       await registration.update();
-
       if (registration.waiting) {
         setStatus('Aplicando atualização…');
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-        checking = false;
         return;
       }
-
       setStatus('Atualizado', 'ok');
     } catch (error) {
       setStatus('Falha ao verificar', 'warn');
@@ -56,7 +49,7 @@
     }
   }
 
-  window.addEventListener('load', () => setTimeout(checkForUpdate, 1200));
+  window.addEventListener('load', () => setTimeout(checkForUpdate, 1400));
   window.addEventListener('online', checkForUpdate);
   window.addEventListener('offline', () => setStatus('Offline', 'warn'));
   document.addEventListener('visibilitychange', () => {
@@ -65,19 +58,19 @@
   setInterval(checkForUpdate, UPDATE_INTERVAL);
 
   try {
-    const previous = localStorage.getItem('shape-app-version');
-    localStorage.setItem('shape-app-version', VERSION);
+    const previous = localStorage.getItem('familia-app-version');
+    localStorage.setItem('familia-app-version', VERSION);
     if (previous && previous !== VERSION) {
       window.addEventListener('load', () => setTimeout(() => {
         setStatus('Nova versão aplicada', 'ok');
         const toast = document.getElementById('toast');
         if (toast) {
-          toast.textContent = `Shape atualizado para v${VERSION} ✓`;
+          toast.textContent = `Dieta Família atualizada para v${VERSION} ✓`;
           toast.classList.add('show');
           setTimeout(() => toast.classList.remove('show'), 2400);
         }
         setTimeout(() => setStatus('Atualizado', 'ok'), 3200);
-      }, 1500), { once:true });
+      }, 1700), { once:true });
     }
   } catch (_) {}
 })();
